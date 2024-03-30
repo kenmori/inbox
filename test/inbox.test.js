@@ -21,4 +21,13 @@ describe('Inbox', () => {
   it('deploys a contract', () => {
     assert.ok(inbox.options.address);
   });
+  it('method', async () => {
+    const message = await inbox.methods.message().call();
+    assert.equal(message, 'Hi there!');
+  });
+  it('method set', async () => {
+    await inbox.methods.setMessage('by!').send({ from: accounts[0] });　 // テスト費用を負担するアカウントを指定
+    const massage = await inbox.methods.message().call();
+    assert.equal(massage, 'by!');
+  });
 });
