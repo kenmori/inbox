@@ -13,12 +13,18 @@ const deploy = async () => {
 
   console.log('Attempting to deploy from account', accounts[0]);
 
-  const result = await new web3.eth.Contract(JSON.parse(interface)) // オブジェクトを渡す必要がある
-    .deploy({ data: bytecode, arguments: ['Hi there!'] })
-    .send({ from: accounts[0] });
+  try {
 
-  console.log('Contract deployed to', result.options.address);
-  provider.engine.stop();
+    const result = await new web3.eth.Contract(JSON.parse(interface)) // オブジェクトを渡す必要がある
+    .deploy({ data: `0x${bytecode}`, arguments: ['Hi there!'] })
+    .send({ gas: "1000000", from: accounts[0] });
+    console.log('Contract deployed to', result.options.address);
+    provider.engine.stop();
+  } catch (err) {
+    console.log(err);
+    provider.engine.stop();
+  }
 }
+
 
 deploy();
